@@ -1,13 +1,13 @@
-body, html {
+html, body {
   height: 100%;
   margin: 0;
-  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #f3f3f3;
   font-family: Arial, sans-serif;
 }
+
 
 .container {
   max-width: 400px;
