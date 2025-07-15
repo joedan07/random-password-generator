@@ -8,9 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const strength = document.getElementById('strength');
   const themeToggle = document.getElementById('themeToggle');
   const body = document.body;
-
-  // ⬇️ Add this AFTER other consts
   const copyBtn = document.getElementById('copyBtn');
+
+  // Copy password
   copyBtn.addEventListener('click', () => {
     const pwd = result.textContent;
     if (pwd && pwd !== '...') {
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 🔁 Toggle Diceware input visibility
+  // Toggle Diceware input
   modeSelect.addEventListener('change', () => {
     if (modeSelect.value === 'custom') {
       dicewareSection.style.display = 'block';
@@ -32,16 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 🌙 Toggle Dark/Light Mode
+  // Toggle theme
   themeToggle.addEventListener('change', () => {
-    if (themeToggle.checked) {
-      body.classList.add('dark');
-    } else {
-      body.classList.remove('dark');
-    }
+    body.classList.toggle('dark', themeToggle.checked);
   });
 
-  // 🔑 Generate Password
+  // Generate Password
   generateBtn.addEventListener('click', () => {
     let password = '';
     if (modeSelect.value === 'random') {
@@ -60,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
     strength.textContent = analyzeStrength(password);
   });
 
-  // ✅ Random Password Logic
   function generateRandomPassword(length) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
     let pwd = '';
@@ -70,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return pwd;
   }
 
-  // ✅ Diceware Password Logic
   function generateDicewarePassword(words) {
     shuffle(words);
     const capitalized = words.map(w => Math.random() < 0.5 ? w.charAt(0).toUpperCase() + w.slice(1) : w);
@@ -94,16 +88,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 🔍 Analyze Strength
   function analyzeStrength(pwd) {
     const feedback = [];
-
     if (pwd.length < 12) feedback.push('Too short');
     if (!/[A-Z]/.test(pwd)) feedback.push('Add uppercase');
     if (!/[a-z]/.test(pwd)) feedback.push('Add lowercase');
     if (!/[0-9]/.test(pwd)) feedback.push('Add digit');
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) feedback.push('Add symbol');
-
     return feedback.length === 0 ? 'Strong ✅' : feedback.join(', ');
   }
+
+  // ===== Feedback Modal Logic =====
+  const feedbackBtn = document.getElementById('feedbackBtn');
+  const feedbackModal = document.getElementById('feedbackModal');
+  const closeBtn = feedbackModal.querySelector('.close');
+  const feedbackForm = document.getElementById('feedbackForm');
+
+  feedbackBtn.addEventListener('click', () => {
+    feedbackModal.style.display = 'block';
+  });
+
+  closeBtn.addEventListener('click', () => {
+    feedbackModal.style.display = 'none';
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === feedbackModal) {
+      feedbackModal.style.display = 'none';
+    }
+  });
+
+  feedbackForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(feedbackForm);
+    const data = Object.fromEntries(formData.entries());
+
+    const webhookURL = "https://script.google.com/macros/s/AKfycbyWVGM4uYdv-Z0hN2F59rGdq32XksIvMYFH5MN2Tlc-7vCiK4YBNoQpOl0CkxmfBNE/exec";
+
+    try {
+      await fetch(webhookURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify(data),
+      });
+
+      alert('Thank you for your feedback!');
+      feedbackModal.style.display = 'none';
+      feedbackForm.reset();
+    } catch (err) {
+      alert('Error submitting feedback.');
+    }
+  });
 });
