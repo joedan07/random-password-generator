@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Random Password Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Dummy Login Page</h2>
+    <form>
+      <label>Email:</label><br>
+      <input type="email" placeholder="your@email.com" /><br><br>
+      <label>Password:</label><br>
+      <input type="password" placeholder="••••••••" /><br><br>
+      <button type="submit">Login</button>
+    </form>
+
+    <hr />
+    <h2>Random Password Generator 🔐</h2>
+
+    <!-- Mode Selection -->
+    <label for="mode">Select Mode:</label>
+    <select id="mode">
+      <option value="random">Random</option>
+      <option value="custom">Custom Words</option>
+    </select>
+
+    <!-- Diceware Input -->
+    <div id="diceware-section" style="display: none;">
+      <label for="customWords">Enter custom words (comma-separated):</label>
+      <input type="text" id="customWords" placeholder="e.g. apple, tree, moon" />
+    </div>
+
+    <!-- Length Selection (for random) -->
+    <label for="length">Password Length:</label>
+    <input type="number" id="length" value="12" min="4" max="32" />
+
+    <!-- Generate Button -->
+    <button id="generateBtn">Generate Password</button>
+
+    <p style="font-size: 12px; color: #888; margin-top: -8px;">
+  * clicking again will generate a new password
+    </p>
+
+    <!-- Output -->
+    <div id="output">
+        <p>
+            <strong>Password:</strong>
+            <span id="result">...</span>
+            <button id="copyBtn" style="margin-left: 10px;">📋</button>
+        </p>
+        <p><strong>Strength:</strong> <span id="strength">-</span></p>
+    </div>
+
+    <!-- Dark/Light Mode -->
+    <label class="toggle">
+      <input type="checkbox" id="themeToggle" />
+      Dark Mode
+    </label>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
